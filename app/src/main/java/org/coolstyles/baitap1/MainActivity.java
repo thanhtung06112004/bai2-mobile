@@ -1,22 +1,21 @@
-package org.coolstyles.baitap1; // Tên package của bạn, giữ nguyên
+package org.coolstyles.baitap1;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log; // Cần import thư viện Log để sử dụng Log.d
+import android.util.Log;
+import android.content.Intent;
+import android.net.Uri;
+import android.view.View;
 
-// KHÔNG CẦN các thư viện EdgeToEdge, Insets, ViewCompat, WindowInsetsCompat cho bài tập này.
-// Có thể xóa các import đó nếu bạn không dùng chúng trong body code.
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "Lifecycle"; // Dùng tag này để lọc Logcat
+    private static final String TAG = "Lifecycle";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Thay vì dùng EdgeToEdge, chỉ cần gọi setContentView nếu layout của bạn là R.layout.activity_main
         setContentView(R.layout.activity_main);
-
         Log.d(TAG, "Hàm onCreate được gọi");
     }
 
@@ -54,5 +53,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "Hàm onRestart được gọi");
+    }
+
+    // -----------------------------------------------------------------
+    // Ví dụ 1: Explicit Intent (Chuyển sang SecondActivity)
+    public void startSecondActivity(View view) {
+        Intent explicitIntent = new Intent(this, SecondActivity.class);
+        startActivity(explicitIntent);
+    }
+
+    // Ví dụ 2: Implicit Intent (Mở trình duyệt web)
+    public void openWebPage(View view) {
+        String url = "https://github.com/thanhtung06112004/bai2-mobile";
+        Intent implicitIntent = new Intent(Intent.ACTION_VIEW);
+        implicitIntent.setData(Uri.parse(url));
+
+        // Kiểm tra xem có ứng dụng nào xử lý được Intent này không
+        // Nếu đã thêm <queries> vào Manifest thì hàm này sẽ hoạt động tốt
+        if (implicitIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(implicitIntent);
+        }
     }
 }
